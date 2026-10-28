@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\ProductPrice;
 use App\Exceptions\BusinessException;
+use App\Models\ProductPrice;
 use Illuminate\Support\Facades\DB;
 
 class ProductPriceService

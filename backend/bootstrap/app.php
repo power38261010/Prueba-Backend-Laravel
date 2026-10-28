@@ -30,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
-                'errors'  => null,
+                'errors' => null,
             ], $e->getStatusCode());
         });
 
@@ -39,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Recurso no encontrado.',
-                'errors'  => null,
+                'errors' => null,
             ], 404);
         });
 
@@ -48,7 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Endpoint no encontrado.',
-                'errors'  => null,
+                'errors' => null,
             ], 404);
         });
 
@@ -57,7 +57,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validacion.',
-                'errors'  => $e->errors(),
+                'errors' => $e->errors(),
             ], 422);
         });
 
@@ -66,17 +66,17 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'success' => false,
                 'message' => 'Error de integridad de datos.',
-                'errors'  => null,
+                'errors' => null,
             ], 500);
         });
 
         // Errores inesperados: respuesta generica en JSON, sin stack traces
         // ni informacion interna (APP_DEBUG = false).
-        $exceptions->render(function (\Throwable $e) {
+        $exceptions->render(function (Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error interno del servidor.',
-                'errors'  => null,
+                'errors' => null,
             ], 500);
         });
     })->create();

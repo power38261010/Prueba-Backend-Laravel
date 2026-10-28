@@ -16,22 +16,22 @@ class CurrencyController extends Controller
     public function __construct(private CurrencyService $service) {}
 
     #[OA\Get(
-        path: "/currencies",
-        tags: ["Divisas"],
-        summary: "Listar divisas",
-        description: "Obtiene la lista de divisas con su símbolo y tasa de cambio.",
+        path: '/currencies',
+        tags: ['Divisas'],
+        summary: 'Listar divisas',
+        description: 'Obtiene la lista de divisas con su símbolo y tasa de cambio.',
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Lista de divisas",
+                description: 'Lista de divisas',
                 content: new OA\JsonContent(
-                    type: "object",
+                    type: 'object',
                     properties: [
-                        new OA\Property(property: "success", type: "boolean", example: true),
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
                         new OA\Property(
-                            property: "data",
-                            type: "array",
-                            items: new OA\Items(ref: "#/components/schemas/Currency")
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(ref: '#/components/schemas/Currency')
                         ),
                     ]
                 )
@@ -47,28 +47,28 @@ class CurrencyController extends Controller
     }
 
     #[OA\Post(
-        path: "/currencies",
-        tags: ["Divisas"],
-        summary: "Crear una divisa",
-        description: "Registra una nueva divisa con su símbolo y tasa de cambio respecto a la divisa base.",
+        path: '/currencies',
+        tags: ['Divisas'],
+        summary: 'Crear una divisa',
+        description: 'Registra una nueva divisa con su símbolo y tasa de cambio respecto a la divisa base.',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ["name", "symbol", "exchange_rate"],
+                required: ['name', 'symbol', 'exchange_rate'],
                 properties: [
-                    new OA\Property(property: "name", type: "string", example: "Libra esterlina"),
-                    new OA\Property(property: "symbol", type: "string", example: "GBP"),
-                    new OA\Property(property: "exchange_rate", type: "number", format: "float", example: 1.250000),
+                    new OA\Property(property: 'name', type: 'string', example: 'Libra esterlina'),
+                    new OA\Property(property: 'symbol', type: 'string', example: 'GBP'),
+                    new OA\Property(property: 'exchange_rate', type: 'number', format: 'float', example: 1.250000),
                 ]
             )
         ),
         responses: [
             new OA\Response(
                 response: 201,
-                description: "Divisa creada",
-                content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")
+                description: 'Divisa creada',
+                content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
             ),
-            new OA\Response(response: 422, description: "Error de validación", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 422, description: 'Error de validación', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ]
     )]
     public function store(StoreCurrencyRequest $request): JsonResponse
@@ -83,26 +83,26 @@ class CurrencyController extends Controller
     }
 
     #[OA\Get(
-        path: "/currencies/{id}",
-        tags: ["Divisas"],
-        summary: "Obtener una divisa por ID",
-        description: "Devuelve los datos de una divisa.",
+        path: '/currencies/{id}',
+        tags: ['Divisas'],
+        summary: 'Obtener una divisa por ID',
+        description: 'Devuelve los datos de una divisa.',
         parameters: [
             new OA\Parameter(
-                name: "id",
-                in: "path",
+                name: 'id',
+                in: 'path',
                 required: true,
-                description: "Identificador de la divisa",
-                schema: new OA\Schema(type: "integer", example: 1)
+                description: 'Identificador de la divisa',
+                schema: new OA\Schema(type: 'integer', example: 1)
             ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Divisa encontrada",
-                content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")
+                description: 'Divisa encontrada',
+                content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
             ),
-            new OA\Response(response: 404, description: "Divisa no encontrada", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: 'Divisa no encontrada', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ]
     )]
     public function show(Currency $currency): JsonResponse
@@ -114,38 +114,38 @@ class CurrencyController extends Controller
     }
 
     #[OA\Put(
-        path: "/currencies/{id}",
-        tags: ["Divisas"],
-        summary: "Actualizar una divisa (completo)",
-        description: "Actualización completa: todos los campos son requeridos (semántica PUT).",
+        path: '/currencies/{id}',
+        tags: ['Divisas'],
+        summary: 'Actualizar una divisa (completo)',
+        description: 'Actualización completa: todos los campos son requeridos (semántica PUT).',
         parameters: [
             new OA\Parameter(
-                name: "id",
-                in: "path",
+                name: 'id',
+                in: 'path',
                 required: true,
-                description: "Identificador de la divisa",
-                schema: new OA\Schema(type: "integer", example: 1)
+                description: 'Identificador de la divisa',
+                schema: new OA\Schema(type: 'integer', example: 1)
             ),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ["name", "symbol", "exchange_rate"],
+                required: ['name', 'symbol', 'exchange_rate'],
                 properties: [
-                    new OA\Property(property: "name", type: "string", example: "Libra esterlina"),
-                    new OA\Property(property: "symbol", type: "string", example: "GBP"),
-                    new OA\Property(property: "exchange_rate", type: "number", format: "float", example: 1.300000),
+                    new OA\Property(property: 'name', type: 'string', example: 'Libra esterlina'),
+                    new OA\Property(property: 'symbol', type: 'string', example: 'GBP'),
+                    new OA\Property(property: 'exchange_rate', type: 'number', format: 'float', example: 1.300000),
                 ]
             )
         ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Divisa actualizada",
-                content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")
+                description: 'Divisa actualizada',
+                content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
             ),
-            new OA\Response(response: 404, description: "Divisa no encontrada", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
-            new OA\Response(response: 422, description: "Error de validación", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: 'Divisa no encontrada', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 422, description: 'Error de validación', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ]
     )]
     public function update(UpdateCurrencyRequest $request, Currency $currency): JsonResponse
@@ -160,23 +160,23 @@ class CurrencyController extends Controller
     }
 
     #[OA\Delete(
-        path: "/currencies/{id}",
-        tags: ["Divisas"],
-        summary: "Eliminar una divisa",
-        description: "Elimina una divisa. Si está referenciada por productos o precios, la eliminación se rechaza.",
+        path: '/currencies/{id}',
+        tags: ['Divisas'],
+        summary: 'Eliminar una divisa',
+        description: 'Elimina una divisa. Si está referenciada por productos o precios, la eliminación se rechaza.',
         parameters: [
             new OA\Parameter(
-                name: "id",
-                in: "path",
+                name: 'id',
+                in: 'path',
                 required: true,
-                description: "Identificador de la divisa",
-                schema: new OA\Schema(type: "integer", example: 1)
+                description: 'Identificador de la divisa',
+                schema: new OA\Schema(type: 'integer', example: 1)
             ),
         ],
         responses: [
-            new OA\Response(response: 204, description: "Eliminada exitosamente sin contenido"),
-            new OA\Response(response: 404, description: "Divisa no encontrada", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
-            new OA\Response(response: 409, description: "Conflicto: no se puede eliminar", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 204, description: 'Eliminada exitosamente sin contenido'),
+            new OA\Response(response: 404, description: 'Divisa no encontrada', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 409, description: 'Conflicto: no se puede eliminar', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ]
     )]
     public function destroy(Currency $currency)

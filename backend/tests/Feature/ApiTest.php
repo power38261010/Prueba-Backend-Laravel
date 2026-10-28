@@ -2,9 +2,7 @@
 
 use App\Models\Currency;
 use App\Models\Product;
-use App\Models\ProductPrice;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class ApiTest extends TestCase
@@ -34,11 +32,11 @@ class ApiTest extends TestCase
         $currency = Currency::first();
 
         $response = $this->postJson('/products', [
-            'name'               => 'Monitor',
-            'description'        => 'Pantalla 27 pulgadas 4K',
-            'price'              => 350.00,
-            'currency_id'        => $currency->id,
-            'tax_cost'           => 63.00,
+            'name' => 'Monitor',
+            'description' => 'Pantalla 27 pulgadas 4K',
+            'price' => 350.00,
+            'currency_id' => $currency->id,
+            'tax_cost' => 63.00,
             'manufacturing_cost' => 200.00,
         ]);
 
@@ -76,20 +74,20 @@ class ApiTest extends TestCase
         $currency = Currency::where('symbol', 'EUR')->first();
 
         $response = $this->putJson("/products/{$product->id}", [
-            'name'               => 'Laptop actualizado',
-            'description'        => 'Nueva descripcion',
-            'price'              => 1500.00,
-            'currency_id'        => $currency->id,
-            'tax_cost'           => 270.00,
+            'name' => 'Laptop actualizado',
+            'description' => 'Nueva descripcion',
+            'price' => 1500.00,
+            'currency_id' => $currency->id,
+            'tax_cost' => 270.00,
             'manufacturing_cost' => 900.00,
         ]);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true, 'message' => 'Producto actualizado.']);
         $this->assertDatabaseHas('products', [
-            'id'               => $product->id,
-            'name'             => 'Laptop actualizado',
-            'currency_id'      => $currency->id,
+            'id' => $product->id,
+            'name' => 'Laptop actualizado',
+            'currency_id' => $currency->id,
         ]);
     }
 
@@ -108,11 +106,11 @@ class ApiTest extends TestCase
     public function rejects_invalid_product_input()
     {
         $response = $this->postJson('/products', [
-            'name'               => '',
-            'description'        => '',
-            'price'              => -10,
-            'currency_id'        => 99999,
-            'tax_cost'           => -5,
+            'name' => '',
+            'description' => '',
+            'price' => -10,
+            'currency_id' => 99999,
+            'tax_cost' => -5,
             'manufacturing_cost' => -5,
         ]);
 
@@ -129,11 +127,11 @@ class ApiTest extends TestCase
     {
         $this->getJson('/products/99999')->assertStatus(404);
         $this->putJson('/products/99999', [
-            'name'               => 'X',
-            'description'        => 'X',
-            'price'              => 1,
-            'currency_id'        => Currency::first()->id,
-            'tax_cost'           => 1,
+            'name' => 'X',
+            'description' => 'X',
+            'price' => 1,
+            'currency_id' => Currency::first()->id,
+            'tax_cost' => 1,
             'manufacturing_cost' => 1,
         ])->assertStatus(404);
         $this->deleteJson('/products/99999')->assertStatus(404);
@@ -143,11 +141,11 @@ class ApiTest extends TestCase
     public function rejects_nonexistent_currency_on_product()
     {
         $response = $this->postJson('/products', [
-            'name'               => 'Producto',
-            'description'        => 'Desc',
-            'price'              => 10,
-            'currency_id'        => 99999,
-            'tax_cost'           => 1,
+            'name' => 'Producto',
+            'description' => 'Desc',
+            'price' => 10,
+            'currency_id' => 99999,
+            'tax_cost' => 1,
             'manufacturing_cost' => 1,
         ]);
 
@@ -163,16 +161,16 @@ class ApiTest extends TestCase
 
         $response = $this->postJson("/products/{$product->id}/prices", [
             'product_id' => $product->id,
-            'currency_id'=> $brl->id,
-            'price'      => 1100.00,
+            'currency_id' => $brl->id,
+            'price' => 1100.00,
         ]);
 
         $response->assertStatus(201);
         $response->assertJson(['success' => true, 'message' => 'Precio creado.']);
         $this->assertDatabaseHas('product_prices', [
             'product_id' => $product->id,
-            'currency_id'=> $brl->id,
-            'price'      => 1100.00,
+            'currency_id' => $brl->id,
+            'price' => 1100.00,
         ]);
 
         $list = $this->getJson("/products/{$product->id}/prices");
@@ -190,8 +188,8 @@ class ApiTest extends TestCase
         // Ya existe precio USD para Laptop (sembrado).
         $response = $this->postJson("/products/{$product->id}/prices", [
             'product_id' => $product->id,
-            'currency_id'=> $usd->id,
-            'price'      => 999.00,
+            'currency_id' => $usd->id,
+            'price' => 999.00,
         ]);
 
         $response->assertStatus(422);
@@ -205,16 +203,16 @@ class ApiTest extends TestCase
         // Producto inexistente.
         $this->postJson('/products/99999/prices', [
             'product_id' => 99999,
-            'currency_id'=> Currency::first()->id,
-            'price'      => 10,
+            'currency_id' => Currency::first()->id,
+            'price' => 10,
         ])->assertStatus(404);
 
         // Divisa inexistente.
         $product = Product::first();
         $this->postJson("/products/{$product->id}/prices", [
             'product_id' => $product->id,
-            'currency_id'=> 99999,
-            'price'      => 10,
+            'currency_id' => 99999,
+            'price' => 10,
         ])->assertStatus(422);
     }
 
@@ -227,9 +225,9 @@ class ApiTest extends TestCase
 
         // Crear
         $create = $this->postJson('/currencies', [
-            'name'         => 'Libra esterlina',
-            'symbol'       => 'GBP',
-            'exchange_rate'=> 1.250000,
+            'name' => 'Libra esterlina',
+            'symbol' => 'GBP',
+            'exchange_rate' => 1.250000,
         ]);
         $create->assertStatus(201);
         $currencyId = $create->json('data.id');
@@ -240,11 +238,11 @@ class ApiTest extends TestCase
 
         // Actualizar (PUT completo)
         $this->putJson("/currencies/{$currencyId}", [
-            'name'         => 'Libra esterlina',
-            'symbol'       => 'GBP',
-            'exchange_rate'=> 1.300000,
+            'name' => 'Libra esterlina',
+            'symbol' => 'GBP',
+            'exchange_rate' => 1.300000,
         ])->assertStatus(200)
-          ->assertJson(['data' => ['exchange_rate' => '1.300000']]);
+            ->assertJson(['data' => ['exchange_rate' => '1.300000']]);
 
         // Eliminar
         $this->deleteJson("/currencies/{$currencyId}")->assertStatus(204);
@@ -266,7 +264,7 @@ class ApiTest extends TestCase
         $response->assertStatus(404);
         $response->assertJson([
             'success' => false,
-            'errors'  => null,
+            'errors' => null,
         ]);
         $this->assertIsString($response->json('message'));
     }

@@ -15,36 +15,36 @@ class ProductPriceController extends Controller
     public function __construct(private ProductPriceService $service) {}
 
     #[OA\Get(
-        path: "/products/{id}/prices",
-        tags: ["Precios por producto"],
-        summary: "Listar precios de un producto",
-        description: "Obtiene todos los precios registrados de un producto en diferentes divisas.",
+        path: '/products/{id}/prices',
+        tags: ['Precios por producto'],
+        summary: 'Listar precios de un producto',
+        description: 'Obtiene todos los precios registrados de un producto en diferentes divisas.',
         parameters: [
             new OA\Parameter(
-                name: "id",
-                in: "path",
+                name: 'id',
+                in: 'path',
                 required: true,
-                description: "Identificador del producto",
-                schema: new OA\Schema(type: "integer", example: 1)
+                description: 'Identificador del producto',
+                schema: new OA\Schema(type: 'integer', example: 1)
             ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Lista de precios del producto",
+                description: 'Lista de precios del producto',
                 content: new OA\JsonContent(
-                    type: "object",
+                    type: 'object',
                     properties: [
-                        new OA\Property(property: "success", type: "boolean", example: true),
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
                         new OA\Property(
-                            property: "data",
-                            type: "array",
-                            items: new OA\Items(ref: "#/components/schemas/ProductPrice")
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(ref: '#/components/schemas/ProductPrice')
                         ),
                     ]
                 )
             ),
-            new OA\Response(response: 404, description: "Producto no encontrado", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: 'Producto no encontrado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ]
     )]
     public function index(Product $product): JsonResponse
@@ -58,38 +58,38 @@ class ProductPriceController extends Controller
     }
 
     #[OA\Post(
-        path: "/products/{id}/prices",
-        tags: ["Precios por producto"],
-        summary: "Crear un precio para un producto",
-        description: "Registra un nuevo precio del producto en una divisa específica. No se permite duplicar la combinación producto/divisa.",
+        path: '/products/{id}/prices',
+        tags: ['Precios por producto'],
+        summary: 'Crear un precio para un producto',
+        description: 'Registra un nuevo precio del producto en una divisa específica. No se permite duplicar la combinación producto/divisa.',
         parameters: [
             new OA\Parameter(
-                name: "id",
-                in: "path",
+                name: 'id',
+                in: 'path',
                 required: true,
-                description: "Identificador del producto",
-                schema: new OA\Schema(type: "integer", example: 1)
+                description: 'Identificador del producto',
+                schema: new OA\Schema(type: 'integer', example: 1)
             ),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ["product_id", "currency_id", "price"],
+                required: ['product_id', 'currency_id', 'price'],
                 properties: [
-                    new OA\Property(property: "product_id", type: "integer", example: 1),
-                    new OA\Property(property: "currency_id", type: "integer", example: 2),
-                    new OA\Property(property: "price", type: "number", format: "float", example: 1333.33),
+                    new OA\Property(property: 'product_id', type: 'integer', example: 1),
+                    new OA\Property(property: 'currency_id', type: 'integer', example: 2),
+                    new OA\Property(property: 'price', type: 'number', format: 'float', example: 1333.33),
                 ]
             )
         ),
         responses: [
             new OA\Response(
                 response: 201,
-                description: "Precio creado",
-                content: new OA\JsonContent(ref: "#/components/schemas/SuccessResponse")
+                description: 'Precio creado',
+                content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
             ),
-            new OA\Response(response: 404, description: "Producto no encontrado", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
-            new OA\Response(response: 422, description: "Divisa inexistente o precio duplicado", content: new OA\JsonContent(ref: "#/components/schemas/ErrorResponse")),
+            new OA\Response(response: 404, description: 'Producto no encontrado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 422, description: 'Divisa inexistente o precio duplicado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ]
     )]
     public function store(StoreProductPriceRequest $request, Product $product): JsonResponse

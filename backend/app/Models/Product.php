@@ -28,9 +28,9 @@ class Product extends Model
      * Casts decimal para evitar problemas de punto flotante en importes monetarios.
      */
     protected $casts = [
-        'price'             => 'decimal:2',
-        'tax_cost'          => 'decimal:2',
-        'manufacturing_cost'=> 'decimal:2',
+        'price' => 'decimal:2',
+        'tax_cost' => 'decimal:2',
+        'manufacturing_cost' => 'decimal:2',
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\BusinessException;
 use App\Models\Product;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class ProductService
         return DB::transaction(function () use ($product, $data) {
             $product->fill($data);
             $product->save();
+
             return $product->fresh(['currency', 'prices.currency']);
         });
     }
@@ -36,7 +38,7 @@ class ProductService
                 $product->delete();
             });
         } catch (QueryException $e) {
-            throw new \App\Exceptions\BusinessException(
+            throw new BusinessException(
                 'No se puede eliminar el producto porque tiene precios asociados.',
                 409
             );

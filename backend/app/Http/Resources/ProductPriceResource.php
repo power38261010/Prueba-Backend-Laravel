@@ -10,11 +10,11 @@ class ProductPriceResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
+            'id' => $this->id,
             'product_id' => $this->product_id,
-            'currency_id'=> $this->currency_id,
-            'price'      => $this->price,
-            'currency'   => new CurrencyResource($this->whenLoaded('currency')),
+            'currency_id' => $this->currency_id,
+            'price' => $this->price,
+            'currency' => new CurrencyResource($this->whenLoaded('currency')),
         ];
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Currency;
 use App\Exceptions\BusinessException;
+use App\Models\Currency;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class CurrencyService
 {
@@ -32,6 +31,7 @@ class CurrencyService
         return DB::transaction(function () use ($currency, $data) {
             $currency->fill($data);
             $currency->save();
+
             return $currency->fresh();
         });
     }
