@@ -1,0 +1,164 @@
+{
+  "info": {
+    "name": "Prueba Backend Laravel - API",
+    "description": "Colección de la API RESTful de productos y precios por divisa. Endpoints base: http://localhost:8000\n\nDocumentación completa: leer README.md",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Divisas",
+      "item": [
+        {
+          "name": "Listar divisas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/currencies", "host": ["{{baseUrl}}"], "path": ["currencies"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.be.success;", "pm.expect(pm.response.json().success).to.equal(true);"] } }
+          ]
+        },
+        {
+          "name": "Crear divisa",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Libra esterlina\",\n  \"symbol\": \"GBP\",\n  \"exchange_rate\": 1.250000\n}" },
+            "url": { "raw": "{{baseUrl}}/currencies", "host": ["{{baseUrl}}"], "path": ["currencies"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(201);", "pm.expect(pm.response.json().success).to.equal(true);", "pm.collectionVariables.set('currencyId', pm.response.json().data.id);"] } }
+          ]
+        },
+        {
+          "name": "Obtener divisa por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/currencies/{{currencyId}}", "host": ["{{baseUrl}}"], "path": ["currencies", "{{currencyId}}"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.be.success;", "pm.expect(pm.response.json().data.id).to.equal(parseInt(pm.collectionVariables.get('currencyId')));"] } }
+          ]
+        },
+        {
+          "name": "Actualizar divisa (PUT completo)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Libra esterlina\",\n  \"symbol\": \"GBP\",\n  \"exchange_rate\": 1.300000\n}" },
+            "url": { "raw": "{{baseUrl}}/currencies/{{currencyId}}", "host": ["{{baseUrl}}"], "path": ["currencies", "{{currencyId}}"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(200);", "pm.expect(pm.response.json().success).to.equal(true);"] } }
+          ]
+        },
+        {
+          "name": "Eliminar divisa",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/currencies/{{currencyId}}", "host": ["{{baseUrl}}"], "path": ["currencies", "{{currencyId}}"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(204);"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.be.success;", "pm.expect(pm.response.json().success).to.equal(true);", "pm.collectionVariables.set('productId', pm.response.json().data[0].id);"] } }
+          ]
+        },
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Monitor 27 pulgadas\",\n  \"description\": \"Pantalla 4K\",\n  \"price\": 350.00,\n  \"currency_id\": 1,\n  \"tax_cost\": 63.00,\n  \"manufacturing_cost\": 200.00\n}" },
+            "url": { "raw": "{{baseUrl}}/products", "host": ["{{baseUrl}}"], "path": ["products"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(201);", "pm.expect(pm.response.json().success).to.equal(true);", "pm.collectionVariables.set('createdProductId', pm.response.json().data.id);"] } }
+          ]
+        },
+        {
+          "name": "Obtener producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.be.success;", "pm.expect(pm.response.json().data.id).to.equal(parseInt(pm.collectionVariables.get('productId')));"] } }
+          ]
+        },
+        {
+          "name": "Actualizar producto (PUT completo)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Monitor 27 pulgadas (actualizado)\",\n  \"description\": \"Pantalla 4K actualizada\",\n  \"price\": 400.00,\n  \"currency_id\": 1,\n  \"tax_cost\": 72.00,\n  \"manufacturing_cost\": 220.00\n}" },
+            "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(200);", "pm.expect(pm.response.json().success).to.equal(true);"] } }
+          ]
+        },
+        {
+          "name": "Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/products/{{productId}}", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(204);"] } }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Precios por producto",
+      "item": [
+        {
+          "name": "Listar precios de un producto",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/products/{{productId}}/prices", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}", "prices"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.be.success;", "pm.expect(pm.response.json().success).to.equal(true);"] } }
+          ]
+        },
+        {
+          "name": "Crear precio para un producto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": {{productId}},\n  \"currency_id\": 2,\n  \"price\": 450.00\n}" },
+            "url": { "raw": "{{baseUrl}}/products/{{productId}}/prices", "host": ["{{baseUrl}}"], "path": ["products", "{{productId}}", "prices"] }
+          },
+          "event": [
+            { "listen": "test", "script": { "exec": ["pm.response.to.have.status(201);", "pm.expect(pm.response.json().success).to.equal(true);"] } }
+          ]
+        }
+      ]
+    }
+  ]
+}

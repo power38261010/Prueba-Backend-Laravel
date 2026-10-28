@@ -1,0 +1,871 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Prueba Backend Laravel - API de Productos y Divisas",
+        "description": "API RESTful para gestionar productos, la información de divisas y los precios de los productos en distintas divisas. Endpoints base: /products, /currencies, /products/{id}/prices",
+        "contact": {
+            "name": "Soporte",
+            "email": "soporte@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/currencies": {
+            "get": {
+                "tags": [
+                    "Divisas"
+                ],
+                "summary": "Listar divisas",
+                "description": "Obtiene la lista de divisas con su símbolo y tasa de cambio.",
+                "operationId": "11ba51d6025f25a760f405e99468818d",
+                "responses": {
+                    "200": {
+                        "description": "Lista de divisas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Currency"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Divisas"
+                ],
+                "summary": "Crear una divisa",
+                "description": "Registra una nueva divisa con su símbolo y tasa de cambio respecto a la divisa base.",
+                "operationId": "556adcedc86da30d2a89d4312d9850de",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "symbol",
+                                    "exchange_rate"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Libra esterlina"
+                                    },
+                                    "symbol": {
+                                        "type": "string",
+                                        "example": "GBP"
+                                    },
+                                    "exchange_rate": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.25
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Divisa creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/currencies/{id}": {
+            "get": {
+                "tags": [
+                    "Divisas"
+                ],
+                "summary": "Obtener una divisa por ID",
+                "description": "Devuelve los datos de una divisa.",
+                "operationId": "46dd319403c5daf059b35ea51630e648",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador de la divisa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Divisa encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Divisa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Divisas"
+                ],
+                "summary": "Actualizar una divisa (completo)",
+                "description": "Actualización completa: todos los campos son requeridos (semántica PUT).",
+                "operationId": "ec9ca4d7027d57057b8599033043c62c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador de la divisa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "symbol",
+                                    "exchange_rate"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Libra esterlina"
+                                    },
+                                    "symbol": {
+                                        "type": "string",
+                                        "example": "GBP"
+                                    },
+                                    "exchange_rate": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Divisa actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Divisa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Divisas"
+                ],
+                "summary": "Eliminar una divisa",
+                "description": "Elimina una divisa. Si está referenciada por productos o precios, la eliminación se rechaza.",
+                "operationId": "690c824f2f5eefcdbe954c5c6a13f861",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador de la divisa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminada exitosamente sin contenido"
+                    },
+                    "404": {
+                        "description": "Divisa no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicto: no se puede eliminar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Listar productos",
+                "description": "Obtiene la lista de productos con su divisa base y precios asociados.",
+                "operationId": "080f057905dc32d2f11065d606dc4cd6",
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Product"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Crear un producto",
+                "description": "Crea un nuevo producto con su divisa base, costo de impuestos y costo de fabricación.",
+                "operationId": "eddf8c7847239ddc1040daadd814e21b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "price",
+                                    "currency_id",
+                                    "tax_cost",
+                                    "manufacturing_cost"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Monitor"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Pantalla 27 pulgadas 4K"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 350
+                                    },
+                                    "currency_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tax_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 63
+                                    },
+                                    "manufacturing_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 200
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Producto creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Obtener un producto por ID",
+                "description": "Devuelve un producto con su divisa base y lista de precios por divisa.",
+                "operationId": "b5099368868dbe7900acd129345eb148",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Actualizar un producto (completo)",
+                "description": "Actualización completa: todos los campos son requeridos (semántica PUT).",
+                "operationId": "2ce632b9d1c0c445557821d09add7ec2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "price",
+                                    "currency_id",
+                                    "tax_cost",
+                                    "manufacturing_cost"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Laptop actualizado"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Nueva descripción"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1500
+                                    },
+                                    "currency_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tax_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 270
+                                    },
+                                    "manufacturing_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 900
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Productos"
+                ],
+                "summary": "Eliminar un producto",
+                "description": "Elimina un producto. Si tiene precios asociados, la eliminación se rechaza por integridad referencial.",
+                "operationId": "76bb7dc4ab3fc3233d5b33ef58e95d7d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Eliminado exitosamente sin contenido"
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicto: no se puede eliminar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}/prices": {
+            "get": {
+                "tags": [
+                    "Precios por producto"
+                ],
+                "summary": "Listar precios de un producto",
+                "description": "Obtiene todos los precios registrados de un producto en diferentes divisas.",
+                "operationId": "2e75a51cb023b7266ee62dea2a521a9b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de precios del producto",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProductPrice"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Precios por producto"
+                ],
+                "summary": "Crear un precio para un producto",
+                "description": "Registra un nuevo precio del producto en una divisa específica. No se permite duplicar la combinación producto/divisa.",
+                "operationId": "11fd6aaaba98ff94acbb27f0d7773ff5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "currency_id",
+                                    "price"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "currency_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1333.33
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Precio creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Divisa inexistente o precio duplicado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Currency": {
+                "title": "Divisa",
+                "description": "Información de una divisa",
+                "properties": {
+                    "id": {
+                        "description": "Identificador único",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Dolar estadounidense"
+                    },
+                    "symbol": {
+                        "type": "string",
+                        "example": "USD"
+                    },
+                    "exchange_rate": {
+                        "description": "Valor de 1 unidad de la divisa en la divisa base",
+                        "type": "number",
+                        "format": "float",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "ProductPrice": {
+                "title": "Precio por divisa",
+                "description": "Precio de un producto en una divisa específica",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "currency_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 1333.33
+                    },
+                    "currency": {
+                        "$ref": "#/components/schemas/Currency"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "title": "Producto",
+                "description": "Producto con su precio en divisa base",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Laptop"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Computadora portátil de 14 pulgadas"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 1200
+                    },
+                    "currency_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "currency": {
+                        "$ref": "#/components/schemas/Currency"
+                    },
+                    "tax_cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 216
+                    },
+                    "manufacturing_cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 700
+                    },
+                    "prices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductPrice"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SuccessResponse": {
+                "title": "Respuesta exitosa",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Operación exitosa."
+                    },
+                    "data": {
+                        "description": "Contenido del recurso",
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "title": "Respuesta de error",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Error de validación."
+                    },
+                    "errors": {
+                        "type": "object",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Divisas",
+            "description": "Divisas"
+        },
+        {
+            "name": "Productos",
+            "description": "Productos"
+        },
+        {
+            "name": "Precios por producto",
+            "description": "Precios por producto"
+        }
+    ]
+}
